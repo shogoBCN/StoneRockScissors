@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="./css/media.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+    <!-- Nunito Font Google-Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Brand + Title -->
+    <title>Rock Paper Scissors</title>
+  </head>
+
+  <body>
+
+
+  <header>
+    <!-- Navigation Bar -->
+
+    <nav class="navbar navbar-expand-md navbar-custom fixed-top px-md-5">
+      <div class="container-fluid navbar-dim py-2">
+        <div class="navbar-brand">
+          <a href="#"><p class="text-dark">Magoo</p><sup class="text-grey">Games</sup></a>
+        </div>
+        
+        <!-- Navbar for medium + screens --> 
+        <div class="collapse navbar-collapse d-none d-md-flex" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-4 ml-auto">
+            <li class="nav-item px-2">
+              <a class="nav-link" href="index.html">Rock Paper Scissors</a>
+            </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link" href="#">Black Jack</a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Navbar for small screens -->
+        <a class="navbar-toggler collapsed" role="button" data-toggle="collapse" href="#xsnavbar"><i class="fas fa-bars"></i></a>
+        <div class="collapse navbar-collapse d-md-none" id="xsnavbar">
+          <div class="navbar-nav xsnav-dim row">
+            <div class="nav-item col-12 mt-2">
+              <a class="nav-link" href="index.html">Rock Paper Scissors</a>
+            </div>
+            <div class="nav-item col-12 mt-3">
+              <a class="nav-link" href="#">Black Jack</a>
+            </div>
+          </div>
+          <div class="col-12 spacer2"></div>
+        </div>
+      </div>
+    </nav>
+  </header> 
+
+
+  <section id="title">
+    <div class="spacer3"></div>
+    <div class="row">
+      <div class="tool-title col-12 text-center" style=font-weight:bold;>
+        <p style="font-size:20px">Rock <span style="color: rgb(51, 153, 255);">Paper </span>Scissors</p>
+      </div>
+    </div>  
+  </section>
+
+
+  <section id="game">
+
+    <!-- Game Frame -->
+    <div class="container gameframe pic-frame">
+
+      <!-- Stats Display -->
+      <div class="row counters">
+        <div class="col-4 text-center">
+          <p id="statsTitle">Player Wins</p>
+          <div id="winCounterMe">0</div>
+        </div>
+
+        <div class="col-4 text-center">
+          <p id="statsTitle">Draws</p>
+          <div id="drawCounter">0</div>
+        </div>
+
+        <div class="col-4 text-center">
+          <p id="statsTitle">AI Wins</p>
+          <div id="winCounterAI">0</div>
+        </div>
+      </div>
+
+      <div class="spacer0"></div> <div class="spacer0"></div>
+
+      <!-- Checkboxes for 1, 3 or endless rounds -->
+      <form class="row checkbox justify-content-center">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <div id="modeTitle">Choose Game Mode:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <label>Single Game
+          <input type="radio" name="radio" id="singleGame">
+          <span class="checkmark"></span>
+        </label>&nbsp;&nbsp;&nbsp
+        <label>Best of Three
+          <input type="radio" name="radio" id="bestOfThree">
+          <span class="checkmark"></span>
+        </label>&nbsp;&nbsp;&nbsp;
+        <label>Endless Game
+          <input type="radio" name="radio" id="endlessGame" checked="checked">
+          <span class="checkmark"></span>
+        </label>&nbsp;&nbsp;&nbsp;&nbsp;
+      </form> 
+    
+      <!-- Actual Game Visualization -->
+      <div class="row game-visu align-items-center">
+
+        <div class="col-4 player">
+          <!-- Player -->
+          <div class="aspectRatioBox" id="mainImgPlayer" style="background-image: url(./img/stone.png);"></div>
+
+          <div class="d-flex social-box justify-content-center">
+            <div class="buttons social-icons">  
+              <div class="text-center">Player Choice</div>
+              <input type="image" src="./img/stone.png" width="50" height="50" id="Rock"></input>
+              <input type="image" src="./img/paper.png" width="50" height="50" id="Paper"></input>
+              <input type="image" src="./img/scissors.png" width="50" height="50" id="Scissors"></input>
+            </div>
+          </div>  
+        </div>
+
+        <!-- Result -->
+        <div class="container col-4 result text-center">
+          <div class="pic-frame">
+            <p id="roundNumber"></p>
+            <p id="roundResult">
+              <span id="roundResPlayer"></span>
+              <span id="roundOperator"></span>
+              <span id="roundResAI"></span>
+            </p>
+            <p id="roundWinner" style="font-weight:900"></p>
+          </div>
+        </div>
+
+        <!-- AI -->
+        
+        <div class="col-4 ai">
+          <div class="aspectRatioBox" id="mainImgAI" style="background-image: url(./img/stone.png);"></div>
+          <div class="d-flex justify-content-center">
+            <div class="text-center" style="padding-bottom:50px">AI Choice</div>           
+          </div>
+        </div>
+
+      <div class="spacer2"></div>
+
+
+    </div>
+
+
+  </section>
+
+
+
+
+
+    <!-- -- Javascript links -- -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <!-- Rock Paper Scissors -->
+    <script src="js/srs.js"></script>
+
+   </body>
