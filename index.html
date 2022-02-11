@@ -69,7 +69,7 @@
     <div class="spacer3"></div>
     <div class="row">
       <div class="tool-title col-12 text-center" style=font-weight:bold;>
-        <p style="font-size:20px">Rock <span style="color: rgb(51, 153, 255);">Paper </span>Scissors</p>
+        <p style="font-size:25px">Rock <span style="color: rgb(51, 153, 255);">Paper </span>Scissors</p>
       </div>
     </div>  
   </section>
@@ -101,44 +101,48 @@
       <div class="spacer0"></div> <div class="spacer0"></div>
 
       <!-- Checkboxes for 1, 3 or endless rounds -->
-      <form class="row checkbox justify-content-center">
+      <form class="row checkbox justify-content-center" name="checkboxes">
         &nbsp;&nbsp;&nbsp;&nbsp;
         <div id="modeTitle">Choose Game Mode:&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        <label>Single Game
-          <input type="radio" name="radio" id="singleGame">
-          <span class="checkmark"></span>
-        </label>&nbsp;&nbsp;&nbsp
         <label>Best of Three
           <input type="radio" name="radio" id="bestOfThree">
           <span class="checkmark"></span>
+        </label>&nbsp;&nbsp;&nbsp
+        <label>Best of Five
+          <input type="radio" name="radio" id="bestOfFive">
+          <span class="checkmark"></span>
         </label>&nbsp;&nbsp;&nbsp;
         <label>Endless Game
-          <input type="radio" name="radio" id="endlessGame" checked="checked">
+          <input type="radio" name="radio" id="endlessGame">
           <span class="checkmark"></span>
         </label>&nbsp;&nbsp;&nbsp;&nbsp;
       </form> 
-    
+ 
+      <div class="spacer0"></div> <div class="spacer0"></div>
+
       <!-- Actual Game Visualization -->
-      <div class="row game-visu align-items-center">
+      <div class="row game-visu">
 
         <div class="col-4 player">
           <!-- Player -->
           <div class="aspectRatioBox" id="mainImgPlayer" style="background-image: url(./img/stone.png);"></div>
 
-          <div class="d-flex social-box justify-content-center">
-            <div class="buttons social-icons">  
+          <div class="d-flex social-box-disabled justify-content-center" id="buttonOuter">
+            <div class="buttons social-icons" id="buttonsInner">  
               <div class="text-center">Player Choice</div>
-              <input type="image" src="./img/stone.png" width="50" height="50" id="Rock"></input>
-              <input type="image" src="./img/paper.png" width="50" height="50" id="Paper"></input>
-              <input type="image" src="./img/scissors.png" width="50" height="50" id="Scissors"></input>
+              <input type="image" class="inputButton" src="./img/stone.png" width="50" height="50" id="Rock"></input>
+              <input type="image" class="inputButton" src="./img/paper.png" width="50" height="50" id="Paper"></input>
+              <input type="image" class="inputButton" src="./img/scissors.png" width="50" height="50" id="Scissors"></input>
             </div>
           </div>  
         </div>
 
         <!-- Result -->
-        <div class="container col-4 result text-center">
-          <div class="pic-frame">
-            <p id="roundNumber"></p>
+        <div class="row col-4 text-center" id="resultDiv">
+
+          <div class="pic-frame col-12" id="resultFrame">
+            <div class="spacer1"></div>
+            <p id="roundNumber" style="font-size: 18px"></p>
             <p id="roundResult">
               <span id="roundResPlayer"></span>
               <span id="roundOperator"></span>
@@ -146,6 +150,7 @@
             </p>
             <p id="roundWinner" style="font-weight:900"></p>
           </div>
+
         </div>
 
         <!-- AI -->
