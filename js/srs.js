@@ -5,33 +5,38 @@ var choicesObj = {
   Scissors: "url('./img/scissors.png')",
 }
 var choices = Object.keys(choicesObj);
+var gameModes = document.querySelectorAll('input[name="radio"]');
 var moveAI;
 var movePlayer;
 var winnerRound;
 var winnerGame;
 var roundCount = 0; 
 var winsPlayer = 0; var draws = 0; var winsAI = 0;
-var selectedMode;
+var requiredWins;
+
+disabler()
 
 // select gameMode from checkboxes and pass relevant argument to game function
-var gameModes = document.querySelectorAll('input[name="radio"]');
 for (var i = 0; i < gameModes.length; i++) {
   gameModes[i].addEventListener("click", function() {
     selectedMode = this.id
-    console.log(selectedMode);
+    console.log("Game Mode: ", selectedMode);
       if (selectedMode == "bestOfThree") {
-        resetGame();
-        game(2)
+        resetGame()
+        enabler()
+        requiredWins = 2;
         return;
       }
       else if (selectedMode == "bestOfFive") {
-        resetGame();
-        game(3)
+        enabler()
+        resetGame()
+        requiredWins = 3;
         return;
       }
       else {
-        resetGame();
-        game(99999)
+        enabler()
+        resetGame()
+        requiredWins = 9999;
         return;
       }
   });
@@ -47,22 +52,17 @@ function displays() {
 
 // resets all variables in the game
 function resetGame() {
-  console.log("resetGame");
-  moveAI = 0;
-  movePlayer = 0;
-  winnerRound = 0;
-  winnerGame = 0;
   roundCount = 0; 
   winsPlayer = 0; 
   draws = 0; 
   winsAI = 0;
-  selectedMode = '';
-  requiredWins = '';
 
+  document.getElementById("roundNumber").innerHTML = ""
   document.getElementById("roundResPlayer").innerHTML = "";  
   document.getElementById("roundOperator").innerHTML = "";  
   document.getElementById("roundResAI").innerHTML = "";  
   document.getElementById("roundWinner").innerHTML = "";  
+  
 
   var toRemove = document.getElementById("winnerWho"); 
   if (toRemove !== null) {
@@ -70,11 +70,10 @@ function resetGame() {
     toRemove = document.getElementById("resetButton"); 
     toRemove.remove();
   }
-  displays()  
 }
 
+// unchecking radio buttons (game mode selectors)
 function resetRadio() {
-  gameModes = document.querySelectorAll('input[name="radio"]'); 
   for (var i = 0; i < gameModes.length; i++) {
     document.checkboxes.radio[i].checked=false;
   }
@@ -94,18 +93,17 @@ function enabler() {
   }
 }
 
-// disables player buttons
+// disables player buttons + gameMode selectors
 function disabler() {
   for (var i = 0; i < choices.length; i++) {
-    var toDisable = document.getElementById(choices[i])
-    toDisable.disabled = true;
+    var disableChoices = document.getElementById(choices[i])
+    disableChoices.disabled = true;
     document.getElementById("buttonOuter").setAttribute("class", "d-flex social-box-disabled justify-content-center");
   }
 }
 
 // styling + output text functions
 function winnerPlayer() {
-  console.log("winnerPlayer");
   winnerRound = "Player";
   document.getElementById("roundResPlayer").innerHTML = movePlayer;
     document.getElementById("roundResPlayer").setAttribute("style", "font-weight:900; color:rgb(51, 153, 255);");
@@ -117,7 +115,6 @@ function winnerPlayer() {
   winsPlayer++;
 }
 function winnerAI() {
-  console.log("winnerAI");
   winnerRound = "AI";
   document.getElementById("roundResPlayer").innerHTML = movePlayer;
     document.getElementById("roundResPlayer").setAttribute("style", "font-weight:900; color:rgb(136, 136, 136);");
@@ -129,7 +126,6 @@ function winnerAI() {
   winsAI++;
 }
 function winnerNone() {
-  console.log("winnerNone");
   document.getElementById("roundResPlayer").innerHTML = "";
   document.getElementById("roundOperator").innerHTML = "Draw";
     document.getElementById("roundOperator").setAttribute("style", "font-weight:900; color:rgb(136, 136, 136);");
@@ -141,7 +137,6 @@ function winnerNone() {
 
 // creates game end button + final stats
 function createEndButton() {
-  console.log("createEndButton");
 var winnerWho = document.createElement('p');
   winnerWho.setAttribute("id", "winnerWho")
   winnerWho.setAttribute("style", "font-weight:900; font-size: 22px; color:rgb(51, 153, 255); border-top: 1px solid rgba(0,0,0,.1); padding-top: 25px;");
@@ -160,34 +155,25 @@ var resetButton = document.createElement('button');
   document.getElementById("resultFrame").appendChild(resetButton);
   }
 
+// event listener player selection buttons
+var inputs = document.querySelectorAll(".inputButton");
+for (var i = 0; i < inputs.length; i++) {
+  inputs[i].addEventListener("click", function() {
+  movePlayer = this.id
+  game(movePlayer)
+  });    
+}
+  
 // actual game
-function game(requiredWins) {
-  console.log("game");
-  enabler()
-
-  var inputs = document.querySelectorAll(".inputButton");
-  for (var i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener("click", function() {
-    movePlayer = this.id
-    handleClick(movePlayer)
-    });    
-  }
-
+function game(movePlayer) {
   // checking choice, display choice IMG, call compareChoices function 
-  function handleClick(buttonID) {
-    console.log("handleClick");
-    moveAIfunc()
-    movePlayer = buttonID;
-    console.log('movePlayer: ' + movePlayer);
-    console.log('moveAI: ' + moveAI);
-    document.getElementById("mainImgPlayer").style.backgroundImage = choicesObj[movePlayer];
-    document.getElementById("mainImgAI").style.backgroundImage = choicesObj[moveAI];
-    compareChoices(moveAI,movePlayer);
-    console.log("requiredWins", requiredWins);
-    gameEnd();
-    displays();
-  }
-
+  moveAIfunc()
+  document.getElementById("mainImgPlayer").style.backgroundImage = choicesObj[movePlayer];
+  document.getElementById("mainImgAI").style.backgroundImage = choicesObj[moveAI];
+  compareChoices(moveAI,movePlayer);
+  gameEnd();
+  displays();
+  
   // AI control
   function moveAIfunc() {
     moveAI = choices[Math.floor(Math.random() * choices.length)]
@@ -195,10 +181,9 @@ function game(requiredWins) {
 
   // compare choices
   function compareChoices(a, b) {
-    console.log("compareChoices");
+
     a = choices.indexOf(a);
     b = choices.indexOf(b);
-    console.log("requiredWins", requiredWins);
     roundCount++;
     if (a == b) {
       winnerNone()
@@ -224,17 +209,13 @@ function game(requiredWins) {
 
   // game end
   function gameEnd() {
-    console.log("gameEnd");
-    console.log(requiredWins,winsPlayer,winsAI);
     if (winsPlayer == requiredWins) {
-      console.log(requiredWins,winsPlayer,winsAI);
       winnerGame = "Player";
       disabler()
       createEndButton()
       return;
     }
     if (winsAI == requiredWins) {
-      console.log(requiredWins,winsPlayer,winsAI);
       winnerGame = "AI";
       disabler()
       createEndButton()
@@ -242,4 +223,3 @@ function game(requiredWins) {
     }
   }
 }
-
