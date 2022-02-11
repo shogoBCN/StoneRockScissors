@@ -28,14 +28,14 @@ html, body {
 
 .spacer1 {
   width: 100%;
-  height: 100;
+  height: 50px;
   display: block;
   clear: both;
 }
 
 .spacer2 {
   width: 100%;
-  height: 78px;
+  height: 75px;
   display: block;
   clear: both;
 }
@@ -136,7 +136,7 @@ html, body {
   display: inline-block;
 }
 
-.social-box .social-icons input {
+.social-box .social-icons input, .social-box-disabled .social-icons input{
   width: 50px;
   height: 50px;
   line-height: 40px;
@@ -151,8 +151,12 @@ html, body {
   transition: ease all 0.55s;
 }
 
+.social-box-disabled .social-icons input {
+  background:  rgb(116, 116, 128);
+}
+
 .social-box .social-icons input:hover {
-  background: rgb(66, 70, 73);
+  background: rgb(177, 210, 235);
 }
 
 #statsTitle {
