@@ -10,12 +10,11 @@ var movePlayer;
 var winnerRound;
 var winnerGame;
 var roundCount = 0; 
+var winsPlayer = 0; var draws = 0; var winsAI = 0;
+var selectedMode;
 
-
-
-// select gameMode from checkboxes and pass relevant parameter to game function
-gameModes = document.querySelectorAll('input[name="radio"]');
-console.log(gameModes);
+// select gameMode from checkboxes and pass relevant argument to game function
+var gameModes = document.querySelectorAll('input[name="radio"]');
 for (var i = 0; i < gameModes.length; i++) {
   gameModes[i].addEventListener("click", function() {
     selectedMode = this.id
@@ -23,20 +22,16 @@ for (var i = 0; i < gameModes.length; i++) {
       if (selectedMode == "bestOfThree") {
         resetGame();
         game(2)
-        console.log(selectedMode);
-        delete selectedMode;
         return;
       }
       else if (selectedMode == "bestOfFive") {
         resetGame();
         game(3)
-        delete selectedMode;
         return;
       }
       else {
         resetGame();
         game(99999)
-        delete selectedMode;
         return;
       }
   });
@@ -61,6 +56,8 @@ function resetGame() {
   winsPlayer = 0; 
   draws = 0; 
   winsAI = 0;
+  selectedMode = '';
+  requiredWins = '';
 
   document.getElementById("roundResPlayer").innerHTML = "";  
   document.getElementById("roundOperator").innerHTML = "";  
@@ -163,90 +160,86 @@ var resetButton = document.createElement('button');
   document.getElementById("resultFrame").appendChild(resetButton);
   }
 
+// actual game
+function game(requiredWins) {
+  console.log("game");
+  enabler()
 
+  var inputs = document.querySelectorAll(".inputButton");
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener("click", function() {
+    movePlayer = this.id
+    handleClick(movePlayer)
+    });    
+  }
 
-  // actual game
-  function game(requiredWins) {
-    var winsPlayer = 0; var draws = 0; var winsAI = 0;
-    console.log("game");
-    enabler()
+  // checking choice, display choice IMG, call compareChoices function 
+  function handleClick(buttonID) {
+    console.log("handleClick");
+    moveAIfunc()
+    movePlayer = buttonID;
+    console.log('movePlayer: ' + movePlayer);
+    console.log('moveAI: ' + moveAI);
+    document.getElementById("mainImgPlayer").style.backgroundImage = choicesObj[movePlayer];
+    document.getElementById("mainImgAI").style.backgroundImage = choicesObj[moveAI];
+    compareChoices(moveAI,movePlayer);
+    console.log("requiredWins", requiredWins);
+    gameEnd();
+    displays();
+  }
 
-    var inputs = document.querySelectorAll(".inputButton");
-    console.log(inputs);
-    for (var i = 0; i < inputs.length; i++) {
-      inputs[i].addEventListener("click", function() {
-      movePlayer = this.id
-      handleClick(movePlayer)
-      });    
+  // AI control
+  function moveAIfunc() {
+    moveAI = choices[Math.floor(Math.random() * choices.length)]
+  }
+
+  // compare choices
+  function compareChoices(a, b) {
+    console.log("compareChoices");
+    a = choices.indexOf(a);
+    b = choices.indexOf(b);
+    console.log("requiredWins", requiredWins);
+    roundCount++;
+    if (a == b) {
+      winnerNone()
+      return;
     }
-
-    // checking choice, display choice IMG, call compareChoices function 
-    function handleClick(buttonID) {
-      console.log("handleClick");
-      moveAIfunc()
-      movePlayer = buttonID;
-      console.log('movePlayer: ' + movePlayer);
-      console.log('moveAI: ' + moveAI);
-      document.getElementById("mainImgPlayer").style.backgroundImage = choicesObj[movePlayer];
-      document.getElementById("mainImgAI").style.backgroundImage = choicesObj[moveAI];
-      compareChoices(moveAI,movePlayer);
-      console.log("requiredWins", requiredWins);
-      gameEnd();
-      displays();
+    if (a == choices.length - 1 && b == 0) {
+      winnerPlayer()
+      return;
     }
-
-    // AI control
-    function moveAIfunc() {
-      moveAI = choices[Math.floor(Math.random() * choices.length)]
+    if (b == choices.length - 1 && a == 0) {
+      winnerAI()
+      return;
     }
-
-    // compare choices
-    function compareChoices(a, b) {
-      console.log("compareChoices");
-      a = choices.indexOf(a);
-      b = choices.indexOf(b);
-      console.log("requiredWins", requiredWins);
-      roundCount++;
-      if (a == b) {
-        winnerNone()
-        return;
-      }
-      if (a == choices.length - 1 && b == 0) {
-        winnerPlayer()
-        return;
-      }
-      if (b == choices.length - 1 && a == 0) {
-        winnerAI()
-        return;
-      }
-      if (a > b) {
-        winnerAI()
-        return;
-      }
-      else {
-        winnerPlayer()
-        return;
-      }
+    if (a > b) {
+      winnerAI()
+      return;
     }
-
-    // game end
-    function gameEnd() {
-      console.log("gameEnd");
-      console.log(requiredWins,winsPlayer,winsAI);
-      if (winsPlayer == requiredWins) {
-        console.log(requiredWins,winsPlayer,winsAI);
-        winnerGame = "Player";
-        disabler()
-        createEndButton()
-        return;
-      }
-      if (winsAI == requiredWins) {
-        console.log(requiredWins,winsPlayer,winsAI);
-        winnerGame = "AI";
-        disabler()
-        createEndButton()
-        return;
-      }
+    else {
+      winnerPlayer()
+      return;
     }
   }
+
+  // game end
+  function gameEnd() {
+    console.log("gameEnd");
+    console.log(requiredWins,winsPlayer,winsAI);
+    if (winsPlayer == requiredWins) {
+      console.log(requiredWins,winsPlayer,winsAI);
+      winnerGame = "Player";
+      disabler()
+      createEndButton()
+      return;
+    }
+    if (winsAI == requiredWins) {
+      console.log(requiredWins,winsPlayer,winsAI);
+      winnerGame = "AI";
+      disabler()
+      createEndButton()
+      return;
+    }
+  }
+}
 
