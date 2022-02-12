@@ -102,7 +102,6 @@ html, body {
   padding-left: 16px;
 }
   
-
 #xsnavbar a:hover {
   color: black;
 }
@@ -207,4 +206,18 @@ html, body {
 
 #modeTitle {
   padding-right: 15px;
+}
+
+.card {
+  width: 50px;
+  height: 80px;
+  padding: 10px;
+  border: solid 1px #808080;
+  background-color: white;
+  display: inline-block;
+  border-radius: 10px;
+  font-size: 10pt;
+  text-align: center;
+  margin: 3px;
+  border:solid 3px;
 }

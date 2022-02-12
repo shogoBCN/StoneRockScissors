@@ -64,10 +64,42 @@
     </nav>
   </header> 
 
+  <section id="title">
+    <div class="spacer3"></div>
+    <div class="row">
+      <div class="tool-title col-12 text-center" style=font-weight:bold;>
+        <p style="font-size:25px">Black<span style="color: rgb(51, 153, 255);">jack</p>
+      </div>
+    </div>  
+  </section>
 
+  <section id="mainGame">
+    <div class="container gameframe pic-frame">
 
+      <div>
+        <button class="gamebuttons" id="newGame" onclick="newGame()">New Game</button>
+        <button class="gamebuttons" id="hitMe" onclick="hitMe()">Hit Me</button>
+        <button class="gamebuttons" id="stand" onclick="stand()">Stand</button>
+      </div>
 
+      <div class="spacer1" id="gameResult"></div>
 
+      <div class="row">
+        <div class="col-2">player Cards</div>
+        <div class="col-4" id="playerCards"></div>
+        <div class="col-2">dealer Cards</div>
+        <div class="col-4" id="dealerCards"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-2">player Points</div>
+        <div class="col-4" id="playerPoints"></div>
+        <div class="col-2">dealer Points</div>
+        <div class="col-4" id="dealerPoints"></div>
+      </div>
+
+    </div>
+  </section>
 
 
 
