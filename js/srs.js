@@ -4,8 +4,13 @@ var choicesObj = {
   Paper: "url('./img/paper.png')",
   Scissors: "url('./img/scissors.png')",
 }
+var modeObj = {
+  bestofthree: "Best of Three",
+  bestoffive:  "Best of Five",
+  endlessgame: "Endless Game",
+}
 var choices = Object.keys(choicesObj);
-var gameModes = document.querySelectorAll('input[name="radio"]');
+var gameModes = Object.keys(modeObj);
 var moveAI;
 var movePlayer;
 var winnerRound;
@@ -13,33 +18,69 @@ var winnerGame;
 var roundCount = 0; 
 var winsPlayer = 0; var draws = 0; var winsAI = 0;
 var requiredWins;
+var gameModeButtons
 
 disabler()
+buttonMaker()
+buttonEventListener()
 
-// select gameMode from checkboxes and pass relevant argument to game function
-for (var i = 0; i < gameModes.length; i++) {
-  gameModes[i].addEventListener("click", function() {
-    selectedMode = this.id
-    console.log("Game Mode: ", selectedMode);
-      if (selectedMode == "bestOfThree") {
-        resetGame()
-        enabler()
-        requiredWins = 2;
-        return;
-      }
-      else if (selectedMode == "bestOfFive") {
-        enabler()
-        resetGame()
-        requiredWins = 3;
-        return;
-      }
-      else {
-        enabler()
-        resetGame()
-        requiredWins = 9999;
-        return;
-      }
-  });
+// game mode button maker
+function buttonMaker() {
+  var modeButtonDiv = document.getElementById("modeButtonDiv");
+  var buttonTitle = document.createElement("div");
+    buttonTitle.setAttribute("id", "modeTitle");
+    buttonTitle.innerHTML = "Choose Game Mode:";
+    modeButtonDiv.appendChild(buttonTitle);
+  var dynamicButton;
+  for (var i = 0; i < gameModes.length; i++) {
+    dynamicButton = document.createElement("button");
+    dynamicButton.setAttribute("id", gameModes[i]);
+    dynamicButton.setAttribute("class", "buttonSmall gameModeButtons")
+    modeButtonDiv.appendChild(dynamicButton);
+    dynamicButton.innerHTML = modeObj[gameModes[i]];
+  } 
+  gameModeButtons = document.querySelectorAll(".gameModeButtons");
+  buttonEventListener() 
+}
+
+function buttonRemover() {
+  for (var i = 0; i < gameModeButtons.length; i++) {
+    var disableChoices1 = gameModeButtons[i];
+    disableChoices1.remove();
+    document.getElementById("modeTitle").innerHTML = modeObj[selectedMode];
+    document.getElementById("modeTitle").setAttribute("style", "font-size:25px;")
+  }
+}
+
+// select gameMode from buttons and pass relevant argument to game function
+function buttonEventListener() {
+  for (var i = 0; i < gameModeButtons.length; i++) {
+    gameModeButtons[i].addEventListener("click", function() {
+      selectedMode = this.id
+      console.log("Game Mode: ", selectedMode);
+        if (selectedMode == "bestofthree") {
+          resetGame()
+          enabler()
+          buttonRemover()
+          requiredWins = 2;
+          return;
+        }
+        else if (selectedMode == "bestoffive") {
+          enabler()
+          resetGame()
+          buttonRemover()
+          requiredWins = 3;
+          return;
+        }
+        else {
+          enabler()
+          resetGame()
+          buttonRemover()
+          requiredWins = 9999;
+          return;
+        }
+    });
+  }
 }
 
 // counters display in relevant html element
@@ -57,7 +98,6 @@ function resetGame() {
   draws = 0; 
   winsAI = 0;
 
-  document.getElementById("roundNumber").innerHTML = ""
   document.getElementById("roundResPlayer").innerHTML = "";  
   document.getElementById("roundOperator").innerHTML = "";  
   document.getElementById("roundResAI").innerHTML = "";  
@@ -69,19 +109,24 @@ function resetGame() {
     toRemove.remove();
     toRemove = document.getElementById("resetButton"); 
     toRemove.remove();
-  }
+  } 
 }
 
-// unchecking radio buttons (game mode selectors)
-function resetRadio() {
-  for (var i = 0; i < gameModes.length; i++) {
-    document.checkboxes.radio[i].checked=false;
-  }
+function removeFadeOut( el, speed ) {
+  var seconds = speed/1000;
+  el.style.transition = "opacity "+seconds+"s ease";
+  el.style.opacity = 0;
+  setTimeout(function() {
+      el.parentNode.removeChild(el);
+  }, speed);
 }
 
 function hardReset() {
   resetGame()
-  resetRadio()
+  displays()
+  document.getElementById("roundNumber").innerHTML = "";
+  removeFadeOut(document.getElementById('modeTitle'), 2000);
+  setTimeout(buttonMaker, 2000)
 }
 
 // enables player buttons
