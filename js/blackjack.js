@@ -54,7 +54,8 @@ function renderCard(what) {
     return cardDiv;
 }
 
-// 2 cards to player & dealer each
+// 2 cards to player & dealer each 
+// checking for blackjacks
 function initDeal() {
   for (var i = 0; i < 2; i++) {
     var card = fullDeck.pop();
@@ -66,6 +67,8 @@ function initDeal() {
   }
   sumPoints(player)
   sumPoints(dealer)
+  console.log(player,dealer);
+  document.getElementById("newGame").disabled = true;
   if (dealer.combinedWeight == 21) {
     if (player.combinedWeight == 21) {
       endGame(false, "bothBJ")
@@ -79,17 +82,8 @@ function initDeal() {
   }
 }
 
-
-
-
-
-function sumPoints(who) {
-  for (var i = 0; i < who.currentHand.length; i++) {
-    who.combinedWeight += who.currentHand[i].CardWeight;
-  }
-  document.getElementById(who.Name + "Points").innerHTML = who.combinedWeight;
-}
-
+// summing card values for each participant 
+// if ace = true and total+10 less than 21 --> ace value = 11;
 function sumPoints(who) {
   var total = 0;
   var ace = false;
@@ -106,7 +100,9 @@ function sumPoints(who) {
   document.getElementById(who.Name + "Points").innerHTML = who.combinedWeight;
 }
 
+// deletes visuals, resets objects, starts the game
 function newGame() {
+  document.getElementById("gameResult").innerHTML = "";
   document.getElementById("hitMe").disabled = false;
   document.getElementById("stand").disabled = false;
   var allCards = document.querySelectorAll(".card");
@@ -120,9 +116,9 @@ function newGame() {
   makeDeck()
   shuffleDeck(fullDeck)
   initDeal()
-  document.getElementById("newGame").disabled = true;
   }
 
+// hitme button
 function hitMe() {
   var card = fullDeck.pop();
   player.currentHand.push(card);
@@ -138,9 +134,21 @@ function pointsCheck() {
   }
 }
 
-function stand() {
 
+function stand() {
+  for (var i = 0; i < 5; i++) {
+    if (dealer.combinedWeight <= 16 && dealer.currentHand.length < 5) {
+      var card = fullDeck.pop();
+      dealer.currentHand.push(card);
+      sumPoints(dealer)
+      console.log(player,dealer);
+    }
+    else {
+      break;
+    }
+  }  
 }
+
 
 function endGame(win, why) {
   if (win == false && why == "over21") {
@@ -158,13 +166,12 @@ function endGame(win, why) {
   else if (win == false && why == "dealerBJ") {
     document.getElementById("gameResult").innerHTML = "Dealer has Blackjack. YOU LOSE!"
   }
-  else if (win == false && why == "playerBJ") {
+  else if (win == true && why == "playerBJ") {
     document.getElementById("gameResult").innerHTML = "You have Blackjack. YOU WIN!"
   }
   else if (win == false && why == "bothBJ") {
     document.getElementById("gameResult").innerHTML = "Both have Blackjack. YOU LOSE!"
   }
-
   document.getElementById("hitMe").disabled = true;
   document.getElementById("stand").disabled = true;
   document.getElementById("newGame").disabled = false;
