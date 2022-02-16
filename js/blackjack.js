@@ -140,7 +140,7 @@ function sumPoints(who) {
     total += 10; 
   }
   who.combinedWeight = total;
-  document.getElementById("playerPoints").innerHTML = player.combinedWeight;
+  document.getElementById("playerPoints").innerHTML = "&nbsp;&nbsp;(Score: " + player.combinedWeight + ")";
 }
 
 // deletes visuals, resets objects, starts the game
@@ -150,6 +150,8 @@ function newRound() {
   profitDisplay("minus")
   document.getElementById("dealerPoints").innerHTML = "";
   document.getElementById("playerPoints").innerHTML = "";
+  document.getElementById("dealerScore").innerHTML = "Dealer";
+  document.getElementById("playerScore").innerHTML = "Player";
   gameResultDiv.innerHTML = "";
   disableToggle("bet", true)
   disableToggle("hitMe", false)
@@ -239,7 +241,7 @@ function endRound(win, why) {
   cardsOnTable = 0;
   renderCard("dealerFirst");
   document.getElementById("dealerFirst").setAttribute("style", "background-color: white");
-  document.getElementById("dealerPoints").innerHTML = dealer.combinedWeight;
+  document.getElementById("dealerPoints").innerHTML = "&nbsp;&nbsp;(Score: " + dealer.combinedWeight + ")";
   if (win == false && why == "tie") {
     gameResultDiv.innerHTML = "Tie, nobody wins!"
     winLoss = "+" + bet + "€";
@@ -300,7 +302,8 @@ function endRound(win, why) {
     disableToggle("bet", true)
     coinDisplayDiv = document.createElement("div");
     coinDisplayDiv.setAttribute("id", "coinDisplay");
-    coinDisplayDiv.innerHTML = " GAME OVER! You're out of Coin."
+    coinDisplayDiv.innerHTML = " GAME OVER! You're out of coin."
+    coinDisplayDiv.setAttribute("style", "font-size:18px; font-weight: 900; color:red")
     document.getElementById("coinDisplayParent").appendChild(coinDisplayDiv);
     betDiv.value = "GG!"
   }
