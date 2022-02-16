@@ -102,7 +102,6 @@ html, body {
   padding-left: 16px;
 }
   
-
 #xsnavbar a:hover {
   color: black;
 }
@@ -116,6 +115,13 @@ html, body {
   border-radius: .25rem!important;
   box-shadow: rgb(58 78 95 / 20%) 0 10px 16px, rgb(58 78 95 / 5%) 0 -5px 16px;
   background-color: #fff;
+  margin-top: 15px;
+}
+
+.pic-frame-main {
+  padding: 10px;
+  background-color: rgb(41, 160, 77);
+  margin-bottom: 15px;
 }
 
 .text-grey {
@@ -207,4 +213,71 @@ html, body {
 
 #modeTitle {
   padding-right: 15px;
+}
+
+.player-frame, .dealer-frame {
+  min-height: 130px;
+}
+
+.card {  
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+  width: 85px;
+  height: 121px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.25);
+}
+
+.cardContent {
+  display: inline-block;
+  position: absolute;
+}
+
+.cardContent.topLeft {
+  top: 5px;
+  left: 5px;
+}
+
+.cardContent.downRight {
+  bottom: 5px;
+  right: 5px;
+  transform: rotate(180deg);
+}
+
+.cardSuit {
+  font-size: 45px;
+  position: absolute;
+  top: 50%;
+  left: 33%;
+  transform: translateY(-50%);
+}
+
+.spade, .club {
+  color: black;
+}
+
+.heart, .diamond {
+  color: red;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.scores {
+  font-weight: 900;
+  padding-bottom: 5px;
+}
+
+#playerScore, #dealerScore {
+  min-height: 30px;
+  font-weight: 900;
+}
+
+.fixedWidth {
+  min-width: 665px!important;
+  max-width: 665px!important;
 }

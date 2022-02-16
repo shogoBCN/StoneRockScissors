@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -21,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
 
     <!-- Brand + Title -->
-    <title>Rock Paper Scissors</title>
+    <title>Black Jack</title>
   </head>
 
   <body>
@@ -65,94 +64,61 @@
     </nav>
   </header> 
 
-
   <section id="title">
     <div class="spacer3"></div>
     <div class="row">
       <div class="tool-title col-12 text-center" style=font-weight:bold;>
-        <p style="font-size:25px">Rock <span style="color: rgb(51, 153, 255);">Paper </span>Scissors</p>
+        <p style="font-size:25px">Black<span style="color: rgb(51, 153, 255);">jack</p>
       </div>
     </div>  
   </section>
 
-
-  <section id="game">
-
-    <!-- Game Frame -->
-    <div class="container gameframe pic-frame">
-
-      <!-- Stats Display -->
-      <div class="row counters">
-        <div class="col-4 text-center">
-          <p id="statsTitle">Player Wins</p>
-          <div id="winCounterMe">0</div>
-        </div>
-
-        <div class="col-4 text-center">
-          <p id="statsTitle">Draws</p>
-          <div id="drawCounter">0</div>
-        </div>
-
-        <div class="col-4 text-center">
-          <p id="statsTitle">AI Wins</p>
-          <div id="winCounterAI">0</div>
+  <section id="mainGame">
+    <div class="row justify-content-center" style="padding-top:10px">
+      <div class="gameframe fixedWidth pic-frame-main">
+        <div class="spacer0"></div>
+        <div class="row justify-content-center">
+          <div class="col-9">
+            <div class="container row">
+              <div id="dealerScore"></div><div id="dealerPoints"></div>
+            </div>
+            <div class="dealer-frame" id="dealerCards"></div>
+            <div class="spacer1"></div>
+            <div class="container row">
+              <div id="playerScore"></div><div id="playerPoints"></div>
+            </div>
+            <div class="player-frame" id="playerCards"></div>
+          </div>
+          <div class="spacer0"></div>
         </div>
       </div>
-
-      <div class="spacer0"></div> <div class="spacer0"></div>
-
-      <!-- game Mod buttons -> created in buttonMaker() -->
-      <div class="row justify-content-center align-items-center" id="modeButtonDiv"></div> 
- 
-      <div class="spacer0"></div> <div class="spacer0"></div>
-
-      <!-- Actual Game Visualization -->
-      <div class="row game-visu">
-
-        <div class="col-4 player">
-          <!-- Player -->
-          <div class="aspectRatioBox" id="mainImgPlayer" style="background-image: url(./img/stone.png);"></div>
-
-          <div class="d-flex social-box-disabled justify-content-center" id="buttonOuter">
-            <div class="buttons social-icons" id="buttonsInner">  
-              <div class="text-center">Player Choice</div>
-              <input type="image" class="inputButton" src="./img/stone.png" width="50" height="50" id="Rock"></input>
-              <input type="image" class="inputButton" src="./img/paper.png" width="50" height="50" id="Paper"></input>
-              <input type="image" class="inputButton" src="./img/scissors.png" width="50" height="50" id="Scissors"></input>
-            </div>
-          </div>  
-        </div>
-
-        <!-- Result -->
-        <div class="row col-4 text-center" id="resultDiv">
-
-          <div class="pic-frame col-12" id="resultFrame">
-            <div class="spacer1"></div>
-            <p id="roundNumber" style="font-size: 18px"></p>
-            <p id="roundResult">
-              <span id="roundResPlayer"></span>
-              <span id="roundOperator"></span>
-              <span id="roundResAI"></span>
-            </p>
-            <p id="roundWinner" style="font-weight:900"></p>
-          </div>
-
-        </div>
-
-        <!-- AI -->
-        
-        <div class="col-4 ai">
-          <div class="aspectRatioBox" id="mainImgAI" style="background-image: url(./img/stone.png);"></div>
-          <div class="d-flex justify-content-center">
-            <div class="text-center" style="padding-bottom:50px">AI Choice</div>           
-          </div>
-        </div>
-
-      <div class="spacer2"></div>
-
-
     </div>
 
+    <div class="row justify-content-center">
+      <div class="row fixedWidth justify-content-between align-items-center" style="padding: 0 0 0 0">
+        <div class="buttons align-items-center">
+          <button class="gamebuttons" id="newRound" onclick="newRound()">New Game</button>
+          <button class="gamebuttons" id="hitMe" onclick="hitMe()">Hit Me</button>
+          <button class="gamebuttons" id="stand" onclick="stand()">Stand</button>
+        </div>            
+        <div class="row align-items-center" style="padding-right: 15px">
+          <div>Your bet:</div>
+          <input type="text" id="bet" size="5" style="margin: 0 15px 0 5px"/>
+          <div style="margin-right: 5px">Current Balance:</div>
+          <div id="money" style="min-width: 50px; font-weight: 900;"></div>
+        </div>      
+      </div>
+    </div>      
+
+    <div class="row justify-content-center">
+      <div class="row fixedWidth justify-content-end align-items-center" style="padding: 0 0 0 0">       
+        <div class="row align-items-center" id="coinDisplayParent" style="margin: 5px 15px -6px 5px; min-height: 30px;"></div>
+      </div>
+    </div> 
+
+    <div class="row justify-content-center">
+      <div class="fixedWidth align-items-center spacer1 pic-frame" id="gameResult" style="font-weight: 900;"></div>
+    </div>
 
   </section>
 
@@ -160,12 +126,13 @@
 
 
 
-    <!-- -- Javascript links -- -->
+
+      <!-- -- Javascript links -- -->
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    <!-- Rock Paper Scissors -->
-    <script src="js/srs.js"></script>
+    <!-- Black Jack -->
+    <script src="js/blackjack.js"></script>
 
    </body>
