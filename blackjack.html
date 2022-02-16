@@ -74,38 +74,46 @@
   </section>
 
   <section id="mainGame">
-    <div class="container gameframe pic-frame-main">
-      <div class="spacer0"></div>
-      <div class="row justify-content-center">
-        <div class="col-10">
-          <div class="scores">Dealer Score: <span id="dealerPoints"></span></div>
-          <div class="dealer-frame" id="dealerCards"></div>
-          <div class="spacer1"></div>
-          <div class="scores">Player Score: <span id="playerPoints"></span></div>
-          <div class="player-frame" id="playerCards"></div>
+    <div class="row justify-content-center" style="padding-top:10px;">
+      <div class="col-6 gameframe pic-frame-main">
+        <div class="spacer0"></div>
+        <div class="row justify-content-center">
+          <div class="col-9">
+            <div class="scores">Dealer Score: <span id="dealerPoints"></span></div>
+            <div class="dealer-frame" id="dealerCards"></div>
+            <div class="spacer1"></div>
+            <div class="scores">Player Score: <span id="playerPoints"></span></div>
+            <div class="player-frame" id="playerCards"></div>
+          </div>
+          <div class="spacer0"></div>
         </div>
       </div>
     </div>
 
-    <div class="container">
-      <div class="row justify-content-between">
-        <div class="buttons">
-          <button class="gamebuttons" id="newGame" onclick="newGame()">New Game</button>
+    <div class="row justify-content-center">
+      <div class="container row col-6 justify-content-between align-items-center" style="padding: 0 0 0 0">
+        <div class="buttons align-items-center">
+          <button class="gamebuttons" id="newRound" onclick="newRound()">New Game</button>
           <button class="gamebuttons" id="hitMe" onclick="hitMe()">Hit Me</button>
           <button class="gamebuttons" id="stand" onclick="stand()">Stand</button>
         </div>
-        <div id="coinDisplay"></div>
-        <div>
-          <label>your bet: <input type="text" id="bet" size="5"/></label>
-          <span id="balance">Current Balance: </span><span id="money"></span>
+
+        <div class="row align-items-center" id="coinDisplayParent"></div>
+        
+        <div class="row align-items-center" style="padding-right: 15px">
+          <div>Your bet:</div>
+          <input type="text" id="bet" size="5" style="margin: 0 15px 0 5px"/>
+          <div style="margin-right: 5px">Current Balance:</div>
+          <div id="money" style="min-width: 50px; font-weight: 900;"></div>
         </div>
+
       </div>
     </div>      
 
-      
+    <div class="row justify-content-center">
+      <div class="col-6 spacer1 pic-frame" id="gameResult" style="font-weight: 900;"></div>
     </div>
 
-    <div class="container spacer1 pic-frame" id="gameResult"></div>
   </section>
 
 

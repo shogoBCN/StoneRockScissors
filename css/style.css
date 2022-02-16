@@ -120,8 +120,6 @@ html, body {
 
 .pic-frame-main {
   padding: 10px;
-  border-radius: .25rem!important;
-  box-shadow: rgb(58 78 95 / 20%) 0 10px 16px, rgb(58 78 95 / 5%) 0 -5px 16px;
   background-color: rgb(41, 160, 77);
   margin-bottom: 15px;
 }

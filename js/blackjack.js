@@ -6,11 +6,12 @@ var player;
 var dealer;
 var money = 1000;
 var minBet = 100;
+var winLoss = 0;
 var bet;
 var moneyDiv = document.getElementById("money");
 var betDiv = document.getElementById("bet");
-var gameResultDiv = document.getElementById("gameResult")
-var coinDisplayDiv = document.getElementById("coinDisplay")
+var gameResultDiv = document.getElementById("gameResult");
+var coinDisplayDiv;
 var cardsOnTable = 0;
 moneyDiv.innerHTML = money + "€";
 betDiv.value = minBet;
@@ -45,7 +46,6 @@ function makeCard(what, who, which) {
   cardsOnTable++;
   var currenthand = document.getElementById(who + "Cards");
   currenthand.appendChild(renderCard(what, which));
-  
 }
 function renderCard(what, which) {
   if (what == "dealerFirst") {
@@ -103,22 +103,29 @@ function initDeal() {
   }
   sumPoints(player)
   sumPoints(dealer)
+  gameResultDiv.innerHTML = "Hit or Stand? You have " + player.combinedWeight + " points."
   console.log(player,dealer);
-  document.getElementById("newGame").disabled = true;
+  disableToggle("newRound", true)
   if (dealer.combinedWeight == 21) {
     if (player.combinedWeight == 21) {
-      setTimeout(() =>endGame(false, "bothBJ"), 1000)
+      disableToggle("hitMe", true)
+      disableToggle("stand", true)
+      setTimeout(() => endRound(false, "bothBJ"), 1000)
     }
     else {
-      setTimeout(() =>endGame(false, "dealerBJ"), 1000)
+      disableToggle("hitMe", true)
+      disableToggle("stand", true)
+      setTimeout(() => endRound(false, "dealerBJ"), 1000)
     }
   }
   else if (player.combinedWeight == 21) {
-    setTimeout(() =>endGame(true, "playerBJ"), 1000)
+    disableToggle("hitMe", true)
+    disableToggle("stand", true)
+    setTimeout(() => endRound(true, "playerBJ"), 1000)
   }
 }
 
-// summing card values for each participant 
+// summing card values for each participant ""
 // if ace = true and total+10 less than 21 --> ace value = 11;
 function sumPoints(who) {
   var total = 0;
@@ -137,15 +144,16 @@ function sumPoints(who) {
 }
 
 // deletes visuals, resets objects, starts the game
-function newGame() {
-
+function newRound() {
   bet = betDiv.value;
+  winLoss = "-" + bet + "€";
+  profitDisplay("minus")
   document.getElementById("dealerPoints").innerHTML = "";
   document.getElementById("playerPoints").innerHTML = "";
   gameResultDiv.innerHTML = "";
-  document.getElementById("bet").disabled = true;
-  document.getElementById("hitMe").disabled = false;
-  document.getElementById("stand").disabled = false;
+  disableToggle("bet", true)
+  disableToggle("hitMe", false)
+  disableToggle("stand", false)
   var allCards = document.querySelectorAll(".card");
   for (var i = 0; i < allCards.length; i++) {
     var removeCard = allCards[i];
@@ -156,9 +164,9 @@ function newGame() {
   fullDeck = [];
   if (bet < minBet || bet > money) {
     gameResultDiv.innerHTML = "Please choose a bet between 100€ and your current balance (" + money + "€)";
-    document.getElementById("hitMe").disabled = true;
-    document.getElementById("stand").disabled = true;
-    document.getElementById("bet").disabled = false;
+    disableToggle("hitMe", true)
+    disableToggle("stand", true)
+    disableToggle("bet", false)
   }
   else {
     money = money - bet;
@@ -171,102 +179,162 @@ function newGame() {
 
 // hitme button
 function hitMe() {
+  disableToggle("hitMe", true)
   var card = fullDeck.pop();
   player.currentHand.push(card);
   makeCard(card, player.Name)
   sumPoints(player)
-  console.log(player,dealer);
   if (player.currentHand.length !== 5 && player.combinedWeight < 21) {
-  gameResultDiv.innerHTML = "You have " + player.combinedWeight + " points. Hit or Stand?"
+  gameResultDiv.innerHTML = "Hit or Stand? You have " + player.combinedWeight + " points."
+  setTimeout(() => disableToggle("hitMe", false) ,1000);
   }
   else if (player.combinedWeight > 21) {
-    setTimeout(() =>endGame(false, "playerOver21"), 1000)
+    setTimeout(() => endRound(false, "playerOver21"), 1000)
   }
   else if (player.currentHand.length == 5 && player.combinedWeight < 21) {
-    setTimeout(() =>endGame(true, "5cards"), 1000)
+    setTimeout(() => endRound(true, "5cards"), 1000)
+  }
+  else if (player.combinedWeight = 21) {
+    disableToggle("hitMe", true)
+    disableToggle("stand", true)
+    gameResultDiv.innerHTML = "You have" + player.combinedWeight + "!! Proceeding with Dealer!"
+    setTimeout(() => stand(),1500);
   }
 }
 
+// stand button
 function stand() {
-  setTimeout(() => renderCard("dealerFirst"), 1000);
+  renderCard("dealerFirst");
+  document.getElementById("dealerFirst").setAttribute("style", "background-color: white");
   for (var i = 0; i < 5; i++) {
-  if (dealer.combinedWeight <= 16 && dealer.currentHand.length < 5) {
-      var card = fullDeck.pop();
-      dealer.currentHand.push(card);
-      makeCard(card, dealer.Name)
-      sumPoints(dealer)
-      console.log(player,dealer)
-  }
-  else {
-    break;
-  }
+    if (dealer.combinedWeight <= 16 && dealer.currentHand.length < 5) {
+        var card = fullDeck.pop();
+        dealer.currentHand.push(card);
+        makeCard(card, dealer.Name)
+        sumPoints(dealer)
+        console.log(player,dealer)
+    }
+    else {
+      break;
+    }
   } 
   if (dealer.combinedWeight > 21) {
-    setTimeout(() =>endGame(true, "dealerOver21"), 1000)
+    setTimeout(() => endRound(true, "dealerOver21"), 1000)
   }
   else if (dealer.combinedWeight > player.combinedWeight) {
-    setTimeout(() =>endGame(false, "lessPoints"), 1000)
+    setTimeout(() => endRound(false, "lessPoints"), 1000)
   }
   else if (dealer.combinedWeight < player.combinedWeight) {
-    setTimeout(() =>endGame(true, "morePoints"), 1000)
+    setTimeout(() => endRound(true, "morePoints"), 1000)
   }
   else if (dealer.combinedWeight == player.combinedWeight) {
-    setTimeout(() =>endGame(false, "tie"), 1000)
+    setTimeout(() => endRound(false, "tie"), 1000)
   }
   if (dealer.currentHand.length == 5 && dealer.combinedWeight < 21) {
-    setTimeout(() =>endGame(false, "5cards"), 1000)
+    setTimeout(() => endRound(false, "5cards"), 1000)
   }
 }
 
-function endGame(win, why) {
+function endRound(win, why) {
   cardsOnTable = 0;
   renderCard("dealerFirst");
   document.getElementById("dealerFirst").setAttribute("style", "background-color: white");
   document.getElementById("dealerPoints").innerHTML = dealer.combinedWeight;
   if (win == false && why == "tie") {
     gameResultDiv.innerHTML = "Tie, nobody wins!"
+    winLoss = "+" + bet + "€";
     money = money + (bet*1);
+    profitDisplay("draw")
   }
   else if (win == false && why == "playerOver21") {
-    gameResultDiv.innerHTML = "So sorry, you're over 21 and YOU LOSE!"
+    gameResultDiv.innerHTML = "YOU LOSE! You're over 21."
+    document.getElementById("dealerFirst").setAttribute("style", "background-image: url(./img/cardbackground.png);");
+    document.getElementById("dealerFirst").innerHTML = "";
+    document.getElementById("dealerPoints").innerHTML = "";
   }
   else if (win == true && why == "dealerOver21") {
-    gameResultDiv.innerHTML = "YAY! Dealer is over 21! YOU WIN!"
+    gameResultDiv.innerHTML = " YOU WIN! Dealer is over 21!"
     money = money + (bet*2); 
+    winLoss = "+" + (bet*2) + "€";
+    profitDisplay("plus")
   }
   else if (win == true && why == "morePoints") {
-    gameResultDiv.innerHTML = "You have " + player.combinedWeight + " and Dealer has " + dealer.combinedWeight + ". YOU WIN!"
+    gameResultDiv.innerHTML = " YOU WIN! You have " + player.combinedWeight + " and Dealer has " + dealer.combinedWeight + "."
     money = money + (bet*2); 
+    winLoss = "+" + (bet*2) + "€";
+    profitDisplay("plus")
   }
   else if (win == false && why == "lessPoints") {
-    gameResultDiv.innerHTML = "You have " + player.combinedWeight + " and Dealer has " + dealer.combinedWeight + ". YOU LOSE!"
+    gameResultDiv.innerHTML = " YOU LOSE! You have " + player.combinedWeight + " and Dealer has " + dealer.combinedWeight + "."
   }
   else if (win == false && why == "dealerBJ") {
-    gameResultDiv.innerHTML = "Dealer has Blackjack. YOU LOSE!"
+    gameResultDiv.innerHTML = "YOU LOSE! Dealer has Blackjack."
   }
   else if (win == true && why == "playerBJ") {
-    gameResultDiv.innerHTML = "You have Blackjack. YOU WIN!"
+    gameResultDiv.innerHTML = "YOU WIN! You have Blackjack."
     money = money + (bet*2); 
+    winLoss = "+" + (bet*2) + "€";
+    profitDisplay("plus")
   }
   else if (win == false && why == "bothBJ") {
-    gameResultDiv.innerHTML = "Both have Blackjack. YOU LOSE!"
+    gameResultDiv.innerHTML = "YOU LOSE! Both have Blackjack."
   }
   else if (win == true && why == "5cards") {
-    gameResultDiv.innerHTML = "You have 5 cards and are still under 21. YOU WIN!"
+    gameResultDiv.innerHTML = "YOU WIN! You have 5 cards and are still under 21."
     money = money + (bet*2); 
+    winLoss = "+" + (bet*2) + "€";
+    profitDisplay("plus")
+    
   }
   else if (win == false && why == "5cards") {
-    gameResultDiv.innerHTML = "Dealer has 5 cards and is still under 21. YOU LOSE!"
+    gameResultDiv.innerHTML = "YOU LOSE! Dealer has 5 cards and is still under 21."
   }
-  document.getElementById("hitMe").disabled = true;
-  document.getElementById("stand").disabled = true;
-  document.getElementById("newGame").disabled = false;
-  document.getElementById("bet").disabled = false;
+  disableToggle("hitMe", true)
+  disableToggle("stand", true)
+  disableToggle("newRound", false)
+  disableToggle("bet", false)
+
   moneyDiv.innerHTML = money + "€";
   if (money < 100) {
-    document.getElementById("bet").disabled = true;
-    document.getElementById("newGame").disabled = true;
-    coinDisplayDiv.innerHTML = "You're out of Coin. GAME OVER!"
+    disableToggle("newRound", true)
+    disableToggle("bet", true)
+    coinDisplayDiv = document.createElement("div");
+    coinDisplayDiv.setAttribute("id", "coinDisplay");
+    coinDisplayDiv.innerHTML = " GAME OVER! You're out of Coin."
+    document.getElementById("coinDisplayParent").appendChild(coinDisplayDiv);
     betDiv.value = "GG!"
   }
+}
+
+function disableToggle(which, state) {
+  document.getElementById(which).disabled = state; 
+}
+
+function profitDisplay(change) {
+  if (document.body.contains(document.getElementById("coinDisplay"))) {
+    coinDisplayDiv.remove();
+  }
+  coinDisplayDiv = document.createElement("div");
+  coinDisplayDiv.setAttribute("id", "coinDisplay");
+  coinDisplayDiv.innerHTML = winLoss;
+  if (change == "plus") {
+    coinDisplayDiv.setAttribute("style", "font-size:18px; font-weight: 900; color:green")
+  }
+  else if (change == "minus") {
+    coinDisplayDiv.setAttribute("style", "font-size:18px; font-weight: 900; color:red")
+  }
+  else if (change == "draw") {
+    coinDisplayDiv.setAttribute("style", "font-size:18px font-weight: 900;")
+  }
+  document.getElementById("coinDisplayParent").appendChild(coinDisplayDiv);
+  setTimeout (() => fadeOut(coinDisplayDiv, 1500), 1000);
+}
+
+function fadeOut(what, speed) {
+  var seconds = speed/1000;
+  what.style.transition = "opacity "+seconds+"s ease";
+  what.style.opacity = 0;
+  setTimeout(function() {
+    what.parentNode.removeChild(what);
+  }, speed);
 }
