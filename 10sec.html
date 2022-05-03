@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+    <!-- Nunito Font Google-Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+    <script src="js/10sec.js"></script>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/media.css" rel="stylesheet">
+    <title>10sec math game</title>
+    
+  </head>
+
+  <body>
+
+    <header>
+      <!-- Navigation Bar -->
+  
+      <nav class="navbar navbar-expand-md navbar-custom fixed-top px-md-5">
+        <div class="container-fluid navbar-dim py-2">
+          <div class="navbar-brand">
+            <a href="#"><p class="text-dark">Magoo</p><sup class="text-grey">Games</sup></a>
+          </div>
+          
+          <!-- Navbar for medium + screens --> 
+          <div class="collapse navbar-collapse d-none d-md-flex" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-4 ml-auto">
+              <li class="nav-item px-2">
+                <a class="nav-link" href="index.html">Rock Paper Scissors</a>
+              </li>
+              <li class="nav-item mx-2">
+                <a class="nav-link" href="blackjack.html">Black Jack</a>
+              </li>
+              <li class="nav-item mx-2">
+                <a class="nav-link" href="10sec.html">10s Math</a>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Navbar for small screens -->
+          <a class="navbar-toggler collapsed" role="button" data-toggle="collapse" href="#xsnavbar"><i class="fas fa-bars"></i></a>
+          <div class="collapse navbar-collapse d-md-none" id="xsnavbar">
+            <div class="navbar-nav xsnav-dim row">
+              <div class="nav-item col-12 mt-2">
+                <a class="nav-link" href="index.html">Rock Paper Scissors</a>
+              </div>
+              <div class="nav-item col-12 mt-3">
+                <a class="nav-link" href="blackjack.html">Black Jack</a>
+              </div>
+              <div class="nav-item col-12 mt-3">
+                <a class="nav-link" href="10sec.html">10s Math</a>
+              </div>
+            </div>
+            <div class="col-12 spacerx2"></div>
+          </div>
+        </div>
+      </nav>
+    </header> 
+
+    <section id="title">
+      <div class="spacer3"></div>
+      <div class="row">
+        <div class="tool-title col-12 text-center" style=font-weight:bold;>
+          <p style="font-size:25px">10 <span style="color: rgb(51, 153, 255);">Seconds </span>Math</p>
+        </div>
+      </div>  
+    </section>
+
+    
+    <!-- game interface frame -->
+    <div class="row justify-content-center">
+      <div class="spacerx0"></div>
+      <div class="interface framer">
+
+        <div class="spacerx0"></div>
+
+        <div class="timer framer">   
+          <span>Timer</span>
+          <p id="timer">10</p>
+        </div> 
+
+        <div class="spacerx1"></div>
+
+        <div class="question framer">   
+          <span>Question</span>
+          <p id="question"></p>
+        </div> 
+
+        <div class="spacerx2"></div>
+        
+        <div class="answer">
+          <input type="text" id="answer" disabled/>
+        </div>
+
+        <div class="spacerx2"></div>
+
+        <div class="start">
+          <button id="start">start game</button>
+        </div>
+
+        <div class="spacerx2"></div>
+
+        <div class="d-flex justify-content-between scores">
+          <div class="thisScore row">
+            <div id="currentlabel">Current Score:&nbsp;&nbsp;</div>
+            <div id="thisScore">0</div>
+          </div>
+          <div class="highscore row">
+            <div id="hslabel">Highscore:&nbsp;&nbsp;</div>
+            <div id="highscore">0</div>
+          </div>
+        </div>
+
+      </div>
+    </div>  
+
+    <!-- game settings frame -->
+    <div class="row justify-content-center">
+      <div class="spacerx1"></div>
+      <div class="settings framer row d-flex justify-content-between">
+
+        <div class="limiter row align-content-center">
+          <div>Number Limit:&nbsp;&nbsp;</div><div id="limiterLabel">10</div>
+          <input type="range" id="limiter" name="vol" min="10" max="50" step="5" value="10" oninput="limterEL(this.value)">
+        </div>
+
+        <div class="radios row align-content-center">
+          <label class="radioLabel"><input type="checkbox" id="plus"/>&nbsp;+</label>
+          <label class="radioLabel"><input type="checkbox" id="minus"/>&nbsp;-</label>
+          <label class="radioLabel"><input type="checkbox" id="multi"/>&nbsp;×</label>
+          <label class="radioLabel"><input type="checkbox" id="div"/>&nbsp;÷</label>
+        </div>
+      </div>
+    </div>
+    <div class="spacerx1"></div>
+
+
+  </body>
+
+</html>
